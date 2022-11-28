@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router'
 
-import { UserRepositoryService } from './users-repository.service'
+import { UserRepositoryService } from '../core/users-repository.service'
 
 @Component({
   styles: [`

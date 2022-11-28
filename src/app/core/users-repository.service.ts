@@ -3,7 +3,7 @@ import { Observable, EMPTY, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 import { IClass } from '../catalog/class.model';
-import { IUser } from './users.model';
+import { IUser } from '../users/users.model';
 
 @Injectable()
 export class UserRepositoryService {

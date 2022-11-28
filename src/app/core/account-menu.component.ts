@@ -1,6 +1,6 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
-import { IUser } from './users/users.model';
+import { IUser } from '../users/users.model';
 
 @Component({
   selector: 'account-menu',

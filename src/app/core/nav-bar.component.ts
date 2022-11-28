@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { UserRepositoryService } from "./users/users-repository.service";
+import { UserRepositoryService } from "./users-repository.service";
 
 @Component({
   selector: 'nav-bar',
