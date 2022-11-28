@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router'
 
-import { DataRepositoryService } from '../services/data-repository'
+import { UserRepositoryService } from './users-repository.service'
 
 @Component({
   styles: [`
@@ -54,12 +53,12 @@ import { DataRepositoryService } from '../services/data-repository'
     <div>
       <h2 class="header">Sign In</h2>
       <form #signInForm="ngForm" (ngSubmit)="signIn(signInForm.value)" autocomplete="off" novalidate>
-        <div class="form-group" [ngClass]="{ 'error' : signInForm.controls['email']?.invalid && signInForm.controls['email']?.dirty }">
+        <div class="form-group" [ngClass]="{ 'error' : signInForm.controls['email'].invalid && signInForm.controls['email'].dirty }">
           <label for="email">Email:</label>
           <em *ngIf="signInForm.controls['email']?.invalid && signInForm.controls['email']?.dirty">Required</em>
           <input [(ngModel)]="credentials.email" required name="email" id="email" type="text" placeholder="Email..." />
         </div>
-        <div class="form-group" [ngClass]="{ 'error' : signInForm.controls['password']?.invalid && signInForm.controls['password']?.dirty }">
+        <div class="form-group" [ngClass]="{ 'error' : signInForm.controls['password'].invalid && signInForm.controls['password'].dirty }">
           <label for="password">Password:</label>
           <em *ngIf="signInForm.controls['password']?.invalid && signInForm.controls['password']?.dirty">Required</em>
           <input [(ngModel)]="credentials.password" required name="password" id="password" type="password" placeholder="Password..." />
@@ -75,10 +74,10 @@ import { DataRepositoryService } from '../services/data-repository'
 export class SignInComponent {
   credentials:any = {};
 
-  constructor(private router:Router, private dataRepository:DataRepositoryService) { }
+  constructor(private router:Router, private userRepository:UserRepositoryService) { }
 
   signIn(credentials:any) {
-    this.dataRepository.signIn(credentials)
+    this.userRepository.signIn(credentials)
       .subscribe(
         null,
         (err) => {console.error(err, 'Error')},
@@ -91,45 +90,4 @@ export class SignInComponent {
   }
 }
 
-@Component({
-  styleUrls: ['../styles/register.css'],
-  templateUrl: '../templates/register.html'
-})
 
-export class RegisterComponent {
-  registerForm: FormGroup;
-  firstName: FormControl;
-  lastName: FormControl;
-  email: FormControl;
-  password: FormControl;
-  saving:boolean=false;
-
-  constructor(private router:Router, private dataRepository:DataRepositoryService) { }
-
-  ngOnInit() {
-    this.firstName = new FormControl('', Validators.required);
-    this.lastName = new FormControl('', Validators.required);
-    this.email = new FormControl('', Validators.required);
-    this.password = new FormControl('', Validators.required);
-
-    this.registerForm = new FormGroup({
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      password: this.password
-    });
-  }
-
-  registerUser(user) {
-    this.saving=true;
-    this.dataRepository.saveUser(user)
-      .subscribe(
-        null,
-        ()=>this.saving=false,
-        () => this.router.navigate(['/catalog']));
-  }
-
-  cancel() {
-    this.router.navigate(['/']);
-  }
-}

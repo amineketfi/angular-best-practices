@@ -1,13 +1,15 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 
+import { IUser } from './users/users.model';
+
 @Component({
   selector: 'account-menu',
-  styleUrls: ['../styles/account-menu.css'],
+  styleUrls: ['./account-menu.component.css'],
   template: `
     <div class="account">
       <span class="welcome" *ngIf="user">
         <a (click)="showMenu=!showMenu">
-          Welcome {{user?.firstName}}
+          Welcome {{user.firstName}}
           <span class="chevron">&#8964;</span>
         </a>
         <div class="menu" *ngIf="showMenu" (click)="signOut()">Sign Out</div>
@@ -17,9 +19,9 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
     </div>`
 })
 export class AccountMenuComponent {
-  @Input() user;
+  @Input() user!: IUser;
   @Output() signedOut:EventEmitter<any> = new EventEmitter<any>();
-  showMenu:boolean;
+  showMenu:boolean = false;
 
   signOut() {
     this.showMenu = false;

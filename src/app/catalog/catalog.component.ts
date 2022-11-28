@@ -1,25 +1,30 @@
 import { Component } from '@angular/core';
 
-import { DataRepositoryService } from "../services/data-repository"
+import { CatalogRepositoryService } from "./catalog-repsitory.service";
+import { UserRepositoryService } from '../users/users-repository.service';
+import { IClass, ICourse } from './class.model';
 
 @Component({
-  styleUrls: ['../styles/catalog.css'],
-  templateUrl: '../templates/catalog.html'
+  styleUrls: ['./catalog.component.css'],
+  templateUrl: './catalog.component.html'
 })
-export class CoursesComponent {
-  classes:any[];
-  visibleClasses:any[];
+export class CatalogComponent {
+  classes:IClass[] = [];
+  visibleClasses:IClass[] = [];
 
-  constructor(public dataRepository:DataRepositoryService) {}
+  constructor(
+    public catalogRepository:CatalogRepositoryService,
+    public userRepository:UserRepositoryService,
+    ) {}
 
   ngOnInit() {
-    this.dataRepository.getCatalog()
+    this.catalogRepository.getCatalog()
       .subscribe(classes => { this.classes = classes; this.applyFilter('')});
   }
 
-  enroll(classToEnroll) {
+  enroll(classToEnroll: IClass) {
     classToEnroll.processing = true;
-    this.dataRepository.enroll(classToEnroll.classId)
+    this.userRepository.enroll(classToEnroll.classId)
       .subscribe(
         null,
         (err) => {console.error(err); classToEnroll.processing = false}, //add a toast message or something
@@ -27,9 +32,9 @@ export class CoursesComponent {
       );
   }
 
-  drop(classToDrop) {
+  drop(classToDrop: IClass) {
     classToDrop.processing = true;
-    this.dataRepository.drop(classToDrop.classId)
+    this.userRepository.drop(classToDrop.classId)
       .subscribe(
         null,
         (err) => { console.error(err); classToDrop.processing = false}, //add a toast message or something
@@ -37,7 +42,7 @@ export class CoursesComponent {
       );
   }
 
-  applyFilter(filter) {
+  applyFilter(filter: string) {
     if (!filter)
       return this.visibleClasses = this.classes;
 
