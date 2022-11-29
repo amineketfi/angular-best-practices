@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { UserRepositoryService } from "../core/users-repository.service";
@@ -10,7 +10,7 @@ import { IUser } from "./users.model";
   templateUrl: './register.component.html'
 })
 
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   firstName: FormControl;
   lastName: FormControl;
@@ -41,6 +41,14 @@ export class RegisterComponent {
 
   registerUser(user: IUser) {
     this.saving=true;
+    this.saveAndRedirect(user);
+  }
+
+  cancel() {
+      this.router.navigate(['/']);
+    }
+
+  private saveAndRedirect(user: IUser) {
     this.userRepository.saveUser(user)
       .subscribe(
         null,
@@ -48,7 +56,5 @@ export class RegisterComponent {
         () => this.router.navigate(['/catalog']));
   }
 
-  cancel() {
-    this.router.navigate(['/']);
-  }
+
 }
